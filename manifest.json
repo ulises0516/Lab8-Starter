@@ -2,7 +2,7 @@
     "name": "Lab8-Starter",
     "short_name": "Ulises Salinas",
     "description": "Great Application",
-    "start_url": "https://ulises0516.github.io/Lab8-Starter/",
+    "start_url": "./index.html",
     "display": "standalone",
     "background_color": "red",
     "theme_color": "blue",
