@@ -1,5 +1,4 @@
 
-
 const CACHE_NAME = 'lab-8-starter';
 
 // Installs the service worker. Feed it some initial URLs to cache
