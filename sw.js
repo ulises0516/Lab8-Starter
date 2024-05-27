@@ -1,7 +1,6 @@
 
 const CACHE_NAME = 'lab-8-starter';
 
-// Installs the service worker. Feed it some initial URLs to cache
 self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
@@ -25,24 +24,26 @@ self.addEventListener('activate', function (event) {
 });
 
 // Intercept fetch requests and cache them
-self.addEventListener('fetch', function (event) {
-  event.respondWith(
-    caches.match(event.request).then(function(response) {
-      if (response) {
-        return response;  // Return the cached response if found
+self.addEventListener('fetch', event => {
+  event.respondWith((async () => {
+    try {
+      const cache = await caches.open(CACHE_NAME);
+
+      const cachedR = await cache.match(event.request);
+      if (cachedR) {
+        return cachedR;
       }
-      return fetch(event.request).then(function(networkResponse) {
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-          return networkResponse;  // Return the network response if it is not valid for caching
-        }
-        return caches.open(CACHE_NAME).then(function(cache) {
-          cache.put(event.request, networkResponse.clone());  // Cache the valid network response
-          return networkResponse;
-        });
-      }).catch(function(error) {
-        console.error('Fetching failed:', error);
-        throw error;  // Re-throw the error to propagate it
-      });
-    })
-  ); 
+
+      const networkR = await fetch(event.request);
+
+      if (networkR && networkR.status === 200 && networkR.type === 'basic') {
+        cache.put(event.request, networkR.clone());
+      }
+
+      return networkR;
+    } catch (error) {
+      console.error('FAILEDEEEE!!!!', error);
+      throw error;
+    }
+  })());
 });
