@@ -60,7 +60,7 @@ function initializeServiceWorker() {
     window.addEventListener('load', () => {
       console.log('Window load event detected. Attempting to register service worker.');
       
-      navigator.serviceWorker.register('/sw.js')
+      navigator.serviceWorker.register('./sw.js')
         .then((registration) => {
           console.log('ServiceWorker registration successful with scope: ', registration.scope);
         })
